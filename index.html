@@ -1,0 +1,13 @@
+<!doctype html><html lang="ko"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<link rel="manifest" href="/game/manifest.webmanifest"><meta name="theme-color" content="#0f1115">
+<link rel="apple-touch-icon" href="/game/apple-touch-icon.png"><meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="UFC방 게임센터"><link rel="icon" href="/game/icon-192.png">
+<title>UFC방 게임센터</title><style>body{margin:0;font-family:system-ui,-apple-system,'Apple SD Gothic Neo','Malgun Gothic',sans-serif;background:#0f1115;color:#e8eaf0;
+display:grid;place-items:center;min-height:100vh;padding:24px;box-sizing:border-box;text-align:center}p{color:#9aa3b2;line-height:1.6}</style></head>
+<body><div><h2 id="t">🎮 게임 사이트로 가는 중…</h2><p id="m">잠깐만요</p></div><script>
+const LIVE="https://watson-hang-variables-styles.trycloudflare.com";
+if("serviceWorker" in navigator)navigator.serviceWorker.register("/game/sw.js").catch(()=>{});
+const off=()=>{document.getElementById("t").textContent="지금은 게임 사이트가 닫혀 있어요";document.getElementById("m").textContent="봇 PC가 꺼져 있거나 다시 켜지는 중이에요. 조금 뒤에 이 링크를 다시 눌러 주세요."};
+if(!LIVE)off();else{const ac=new AbortController();setTimeout(()=>ac.abort(),6000);
+fetch(LIVE+"/ping",{cache:"no-store",signal:ac.signal}).then(r=>r.ok?location.replace(LIVE+"/game"+location.search+location.hash):off()).catch(off)}
+</script></body></html>

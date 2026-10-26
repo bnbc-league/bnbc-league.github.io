@@ -1,0 +1,31 @@
+<!doctype html><html lang="ko"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>UFC 단톡 승부예측</title><style>
+:root{--bg:#0f0f12;--card:#17171b;--grid:#2a2a31;--text:#ececf0;--sub:#9a9aa4;--gold:#d4af37}
+@media (prefers-color-scheme: light){:root:not([data-theme="dark"]){--bg:#f5f4f0;--card:#fff;--grid:#e3e1db;--text:#16161a;--sub:#6d6d73;--gold:#a8831c}}
+*{box-sizing:border-box}body{margin:0;min-height:100vh;display:flex;align-items:center;justify-content:center;background:var(--bg);color:var(--text);
+font:15px/1.5 "Noto Sans KR",Arial,"Malgun Gothic","Apple SD Gothic Neo",sans-serif;padding:16px}
+.box{width:100%;max-width:380px;background:var(--card);border:1px solid var(--grid);border-radius:12px;padding:26px 22px;text-align:center}
+.kick{font-size:11px;letter-spacing:.18em;color:var(--sub)}h1{margin:4px 0 6px;font:400 34px/1.15 "Black Han Sans",Impact,sans-serif}h1 b{color:var(--gold);font-weight:400}
+p{color:var(--sub);font-size:13px;margin:0 0 16px}input{width:100%;font:inherit;font-size:20px;letter-spacing:.2em;text-align:center;padding:11px;border-radius:8px;
+border:1px solid var(--grid);background:var(--bg);color:var(--text)}button,a.go{display:block;width:100%;margin-top:10px;padding:11px;border-radius:8px;border:1px solid var(--gold);
+background:#16161a;color:#d4af37;font:inherit;font-weight:700;cursor:pointer;text-decoration:none}#msg{min-height:20px;margin:8px 0 0;color:#ef6b6b;font-size:13px}
+</style><link href="https://fonts.googleapis.com/css2?family=Black+Han+Sans&family=Noto+Sans+KR:wght@400;700&display=swap" rel="stylesheet"></head>
+<body><div class="box"><div class="kick">UFC PREDICTION</div><h1>UFC 단톡 <b>승부예측</b></h1>
+<p>운영진에게 받은 개인 코드를 넣으면<br>내 방 승부예측 페이지로 들어가요</p>
+<div id="f"></div><div id="msg"></div></div>
+<script>
+const LIVE="https://watson-hang-variables-styles.trycloudflare.com";
+const f=document.getElementById("f"),msg=document.getElementById("msg");
+if(LIVE===null){
+  f.innerHTML='<input id="code" type="password" inputmode="numeric" autocomplete="off" placeholder="코드"><button id="go">입장</button>';
+  const go=async()=>{msg.textContent="";try{const r=await fetch("/api/login",{method:"POST",headers:{"Content-Type":"application/json"},
+    body:JSON.stringify({code:document.getElementById("code").value})});const j=await r.json();if(j.ok)location.href="/";else msg.textContent=j.msg||"코드가 틀렸어요."}
+    catch(e){msg.textContent="연결이 안 돼요. 잠시 후 다시 해 주세요."}};
+  document.getElementById("go").onclick=go;document.getElementById("code").onkeydown=e=>{if(e.key==="Enter")go()};
+}else{
+  f.innerHTML='<a class="go" id="live" href="#">확인 중…</a>';const a=document.getElementById("live");
+  const off=()=>{a.textContent="지금은 닫혀 있어요 (봇 PC가 꺼져 있음)";a.removeAttribute("href")};
+  if(!LIVE)off();else{const ac=new AbortController();setTimeout(()=>ac.abort(),5000);
+    fetch(LIVE+"/ping",{cache:"no-store",signal:ac.signal}).then(r=>{if(!r.ok)return off();a.textContent="코드 넣고 입장하기 →";a.href=LIVE}).catch(off)}
+}
+</script></body></html>
